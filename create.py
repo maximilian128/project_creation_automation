@@ -22,12 +22,13 @@ def create():
     
     project_folder_path = path + "/" + str(folderName)
     os.makedirs(project_folder_path)
+    os.makedirs(project_folder_path + "/.vscode")
 
     with open(project_folder_path + '/.gitignore', 'w') as f:
         f.write("*.pyc \n *~ \n __pycache__ \n .DS_Store \n .vscode \n .env \n env")
     with open(project_folder_path + '/README.md', 'w') as f:
         f.write(f"# {folderName}")
-    with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
+    with open(project_folder_path + "/settings.json", 'w') as f:
         f.writelines([
             '{ \n',
             '    "python.terminal.activateEnvironment": true, \n',
