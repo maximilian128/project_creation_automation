@@ -1,9 +1,9 @@
 # project_creation_automation
-
+```
 Inspired by Kalle Hallden's [ProjectInitializationAutomation](https://github.com/KalleHallden/ProjectInitializationAutomation).
 With this project you can use the terminal to create new projects and initialize GitHub repositories.
 Build for Mac OS.
-
+```
 
 ## Usage:
 ```
@@ -57,23 +57,23 @@ Copy the following function into the file:
 
     #!/bin/bash
     function create() {
-    # Uses the create.py file to create a new python project folder as well as a README.md and .gitignore file.
-    # write create public NAME_OF_NEW_REPO for a new public repo
-    # wirte create NAME_OF_NEW_REPO for a new private repo
+        # Uses the create.py file to create a new python project folder as well as a README.md and .gitignore file.
+        # write create public NAME_OF_NEW_REPO for a new public repo
+        # write create NAME_OF_NEW_REPO for a new private repo
 
-    cd $FP/project_creation_automation/
-    python create.py $1 $2
-    # set standard value for $1:
-    ${2:=$1}
+        cd $FP/project_creation_automation/
+        python create.py $1 $2
+        # set standard value for $1:
+        ${2:=$1}
 
-    cd $FP$2
-    git init
-    git remote add origin git@github.com:$UN/$2.git
-    git add .
-    git commit -m "initial commit"
-    git push -u origin master
-    code .
-}
+        cd $FP$2
+        git init
+        git remote add origin git@github.com:$UN/$2.git
+        git add .
+        git commit -m "initial commit"
+        git push -u origin master
+        code .
+    }
 ```
 
 ### 5) Modify .zshrc file
