@@ -23,8 +23,9 @@ Don't close the website. You need the token for the next step. Once closed, you 
 ```
 open Terminal and execute:
     cd PATH/TO/YOUR/PROJECTS/FOLDER
-    git clone *******
+    mkdir project_creation_automation
     cd project_creation_automation
+    git clone https://github.com/maximilian128/project_creation_automation.git .
     pip install -r requirements.txt
     touch .env
     open .env
