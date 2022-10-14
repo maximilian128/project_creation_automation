@@ -1,0 +1,5 @@
+{
+    "python.terminal.activateEnvironment": true,
+    "python.defaultInterpreterPath": "/Users/maximilianseidel/Documents/Programmieren/Python/Python_Projects/project_creation_automation/env/bin/python",
+    "python.analysis.typeCheckingMode": "off"
+}
