@@ -1,4 +1,11 @@
-### Usage:
+# project_creation_automation
+
+Inspired by Kalle Hallden's [ProjectInitializationAutomation link] (https://github.com/KalleHallden/ProjectInitializationAutomation).
+With this project you can use the terminal to create new projects and initialize GitHub repositories.
+Build for Mac OS.
+
+
+## Usage:
 ```
 To create and initialize a new project open the terminal and type 'create <name_of_your_project>'
 If you want a pubblic project, type 'create public <name_of_your_project>
