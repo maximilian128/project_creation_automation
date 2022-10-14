@@ -23,7 +23,7 @@ def create():
     os.makedirs(path + str(folderName))
     path += str(folderName + "/")
     with open(path + '.gitignore', 'w') as f:
-        f.write("*.pyc \n *~ \n __pycache__ \n .DS_Store \n env")
+        f.write("*.pyc \n *~ \n __pycache__ \n .DS_Store \n .vscode \n .env \n env")
     with open(path + 'README.md', 'w') as f:
         f.write(f"# {folderName}")
 
