@@ -24,15 +24,23 @@ def create():
     os.makedirs(project_folder_path + "/.vscode")
 
     with open(project_folder_path + '/.gitignore', 'w') as f:
-        f.write("*.pyc \n *~ \n __pycache__ \n .DS_Store \n .vscode \n .env \n env")
+        f.writelines([
+            "*.pyc\n",
+            "*~\n",
+            "__pycache__\n",
+            ".DS_Store\n",
+            ".vscode\n",
+            ".env\n",
+            "env"
+        ])
     with open(project_folder_path + '/README.md', 'w') as f:
         f.write(f"# {folderName}")
     with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
         f.writelines([
             '{ \n',
-            '    "python.terminal.activateEnvironment": true, \n',
-            f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python", \n',
-            '    "python.analysis.typeCheckingMode": "off" \n',
+            '    "python.terminal.activateEnvironment": true,\n',
+            f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python",\n',
+            '    "python.analysis.typeCheckingMode": "off"\n',
             '}'
         ])
 
