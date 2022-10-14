@@ -30,7 +30,7 @@ Don't close the website. You need the token for the next step.
 Once closed, you can't see the token again and have to create a new one.
 ```
 
-### 3) CLone this repo as well as create and modify .env file
+### 3) Clone this repo as well as create and modify .env file
 ```
 open Terminal and execute:
     cd PATH/TO/YOUR/PROJECTS/FOLDER
