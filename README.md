@@ -73,7 +73,7 @@ Copy the following function into the file:
         # set standard value for $1:
         ${2:=$1}
 
-        cd $FP$2
+        cd $FP/$2
         git init
         git remote add origin git@github.com:$UN/$2.git
         git add .
