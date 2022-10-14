@@ -4,7 +4,6 @@ import os
 from dotenv import load_dotenv
 from github import Github
 
-
 def create():
 
     load_dotenv()
@@ -28,11 +27,11 @@ def create():
         f.write("*.pyc \n *~ \n __pycache__ \n .DS_Store \n .vscode \n .env \n env")
     with open(project_folder_path + '/README.md', 'w') as f:
         f.write(f"# {folderName}")
-    with open(project_folder_path + "/settings.json", 'w') as f:
+    with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
         f.writelines([
             '{ \n',
             '    "python.terminal.activateEnvironment": true, \n',
-            f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python3", \n',
+            f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python", \n',
             '    "python.analysis.typeCheckingMode": "off" \n',
             '}'
         ])
