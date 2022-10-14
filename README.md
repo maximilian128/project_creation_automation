@@ -3,6 +3,7 @@
 Inspired by Kalle Hallden's [ProjectInitializationAutomation](https://github.com/KalleHallden/ProjectInitializationAutomation).
 With this project you can use the terminal to create new projects and initialize GitHub repositories.
 Build for Mac OS.
+<a href="https://github.com/KalleHallden/ProjectInitializationAutomation">About Us</a>
 ```
 
 ## Usage:
