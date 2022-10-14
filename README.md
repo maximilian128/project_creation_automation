@@ -1,6 +1,7 @@
 ### Usage:
 ```
-To run the script type in 'create <name of your folder>'
+To create and initialize a new project open the terminal and type 'create <name_of_your_project>'
+If you want a pubblic project, type 'create public <name_of_your_project>
 ```
 ## Installation for Mac OS
 
