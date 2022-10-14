@@ -95,7 +95,7 @@ Add a new line with "source /PATH/TO/YOUR/.ENV_FILE/"
 
 ### 6) Attention:
 ```
-Keep in mind that changing the location of the .env or my_commands.sh file will break the procedure.
+Changing the location of the .env or my_commands.sh file will break the procedure.
 If changed, the paths in the .zshrc and the .env file must be respecified.
 ```
 
