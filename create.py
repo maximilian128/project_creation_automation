@@ -20,12 +20,21 @@ def create():
         if str(sys.argv[1]) == "public":
             privacy = False
     
-    os.makedirs(path + str(folderName))
-    path += str(folderName + "/")
-    with open(path + '.gitignore', 'w') as f:
+    project_folder_path = path + "/" + str(folderName)
+    os.makedirs(project_folder_path)
+
+    with open(project_folder_path + '/.gitignore', 'w') as f:
         f.write("*.pyc \n *~ \n __pycache__ \n .DS_Store \n .vscode \n .env \n env")
-    with open(path + 'README.md', 'w') as f:
+    with open(project_folder_path + '/README.md', 'w') as f:
         f.write(f"# {folderName}")
+    with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
+        f.writelines([
+            '{ \n',
+            '    "python.terminal.activateEnvironment": true, \n',
+            f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python3", \n',
+            '    "python.analysis.typeCheckingMode": "off" \n',
+            '}'
+        ])
 
     user = Github(username, password).get_user()
     user.create_repo(folderName, private=privacy)

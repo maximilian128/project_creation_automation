@@ -42,7 +42,7 @@ open Terminal and execute:
     open .env
 Store your username, password, and desired path for new projects.
 The password is the generated token.
-The path must end with a forward slash (/)
+The path must NOT end with a forward slash (/)
 Use the provided format at the bottom of this README.
 Save and close the .env file.
 Copy the project_creation_automation folder into the desired path for new projects.
