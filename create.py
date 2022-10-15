@@ -10,24 +10,17 @@ def create():
     path = os.getenv("FP")
     username = os.getenv("UN")
     password = os.getenv("PW")
-
-    # privacy = True
-    # if str(sys.argv[1]) != "public":
-    #     project_name = str(sys.argv[1])
-    # else:
-    #     project_name = str(sys.argv[2])
-    #     privacy = False
     
     if str(sys.argv[1]) == "private":
         privacy = True
     else:
         privacy = False
+
     project_name = str(sys.argv[2])
+    project_folder_path = path + "/" + project_name
 
-    project_folder_path = path + "/" + str(project_name)
-    os.makedirs(project_folder_path)
-    os.makedirs(project_folder_path + "/.vscode")
-
+    with open(project_folder_path + '/README.md', 'w') as f:
+        f.write(f"# {project_name}")
     with open(project_folder_path + '/.gitignore', 'w') as f:
         f.writelines([
             "*.pyc\n",
@@ -38,8 +31,6 @@ def create():
             ".env\n",
             "env"
         ])
-    with open(project_folder_path + '/README.md', 'w') as f:
-        f.write(f"# {project_name}")
     with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
         f.writelines([
             '{ \n',
@@ -59,7 +50,6 @@ if __name__ == "__main__":
 
 
 """
-variable
 help page
 
 
