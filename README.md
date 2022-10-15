@@ -65,8 +65,11 @@ create public this_is_a_new_project numpy pandas matplotlib
     touch ~/.zshrc
     open ~/.zshrc
 ```
-2. Add a new line with "source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/my_commands.sh"
-3. Add a new line with "source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/.ENV_FILE/.env"
+2. Add two new lines:
+```
+source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/my_commands.sh
+source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/.env
+```
 
 ### 5) Attention:
 * Changing the location of the .env or my_commands.sh file (or of the projects folder) will break the procedure.
