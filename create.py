@@ -11,15 +11,20 @@ def create():
     username = os.getenv("UN")
     password = os.getenv("PW")
 
-    privacy = True
-    if len(sys.argv) == 2:
-        folderName = str(sys.argv[1])
-    else:
-        folderName = str(sys.argv[2])
-        if str(sys.argv[1]) == "public":
-            privacy = False
+    # privacy = True
+    # if str(sys.argv[1]) != "public":
+    #     project_name = str(sys.argv[1])
+    # else:
+    #     project_name = str(sys.argv[2])
+    #     privacy = False
     
-    project_folder_path = path + "/" + str(folderName)
+    if str(sys.argv[1]) == "private":
+        privacy = True
+    else:
+        privacy = False
+    project_name = str(sys.argv[2])
+
+    project_folder_path = path + "/" + str(project_name)
     os.makedirs(project_folder_path)
     os.makedirs(project_folder_path + "/.vscode")
 
@@ -34,7 +39,7 @@ def create():
             "env"
         ])
     with open(project_folder_path + '/README.md', 'w') as f:
-        f.write(f"# {folderName}")
+        f.write(f"# {project_name}")
     with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
         f.writelines([
             '{ \n',
@@ -45,8 +50,8 @@ def create():
         ])
 
     user = Github(username, password).get_user()
-    user.create_repo(folderName, private=privacy)
-    print(f"\n Succesfully created project {folderName} \n")
+    user.create_repo(project_name, private=privacy)
+    print(f"\n Succesfully created project {project_name} \n")
 
 
 if __name__ == "__main__":
