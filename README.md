@@ -68,14 +68,32 @@ or directly in the project_creation_automation folder:
         # write create public NAME_OF_NEW_REPO for a new public repo
         # write create NAME_OF_NEW_REPO for a new private repo
 
-        cd $FP/project_creation_automation/
-        python create.py $1 $2
-        # set standard value for $1:
-        ${2:=$1}
+        if [ "$1" != "public" ]
+            then
+                project_name=$1
+                privacy="private"
+                shift 1
+        elif [ condition ]
+            then
+                project_name=$2
+                privacy="public"
+                shift 2
+        fi
 
-        cd $FP/$2
+        mkdir $FP/$project_name
+        mkdir $FP/$project_name/.vscode
+
+        cd $FP/$project_name
+        conda create --prefix $FP/$project_name/env python=3.10 -y
+        conda activate $FP/$project_name/env
+        for package in $*
+            pip install $package
+        conda deactivate
+
+        python $FP/project_creation_automation/create.py $privacy $project_name
+
         git init
-        git remote add origin git@github.com:$UN/$2.git
+        git remote add origin git@github.com:$UN/$project_name.git
         git add .
         git commit -m "initial commit"
         git push -u origin master
