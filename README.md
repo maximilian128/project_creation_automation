@@ -1,19 +1,21 @@
 # Project information
 
 * Inspired by Kalle Hallden's [ProjectInitializationAutomation](https://github.com/KalleHallden/ProjectInitializationAutomation).
-* With this project you can use the terminal to create new projects and initialize GitHub repositories.
-* A conda environment is created within the projects folder 
+* With this project you can use the terminal to create new Python projects and initialize GitHub repositories.
+* A conda environment is created within the projects folder.
 * Build for Mac OS.
 
 ## Usage:
 
 * To create and initialize a new project open the terminal and type\
     'create <name_of_your_project> <name_of_packages_to_install>' for a private repository\
-    'create public <name_of_your_project> for a public reppository
+    'create public <name_of_your_project> <name_of_packages_to_install> for a public reppository
 * The packages need to be seperated by spaces
 
 ### Example:
-* create public this_is_a_new_project numpy pandas matplotlib
+```
+create public this_is_a_new_project numpy pandas matplotlib
+```
 * This command creates a new public project called "this_is_a_new_project" and installs numpy, pandas and matplotlib in the conda environment.
 
 ## Installation for Mac OS

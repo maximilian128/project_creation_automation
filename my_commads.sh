@@ -10,7 +10,7 @@ function create() {
             project_name=$1
             privacy="private"
             shift 1
-    elif [ condition ]
+    else
         then
             project_name=$2
             privacy="public"
