@@ -1,16 +1,24 @@
 # Project information
 
-* Inspired by Kalle Hallden's [ProjectInitializationAutomation](https://github.com/KalleHallden/ProjectInitializationAutomation).\
-* With this project you can use the terminal to create new projects and initialize GitHub repositories.\
+* Inspired by Kalle Hallden's [ProjectInitializationAutomation](https://github.com/KalleHallden/ProjectInitializationAutomation).
+* With this project you can use the terminal to create new projects and initialize GitHub repositories.
+* A conda environment is created within the projects folder 
 * Build for Mac OS.
 
 ## Usage:
 
 * To create and initialize a new project open the terminal and type\
-    'create <name_of_your_project>' for a private repository\
+    'create <name_of_your_project> <name_of_packages_to_install>' for a private repository\
     'create public <name_of_your_project> for a public reppository
+* The packages need to be seperated by spaces
+
+### Example:
+* create public this_is_a_new_project numpy pandas matplotlib
+* This command creates a new public project called "this_is_a_new_project" and installs numpy, pandas and matplotlib in the conda environment.
 
 ## Installation for Mac OS
+
+* You need to have miniconda installed. See [minconda installation](https://docs.conda.io/en/latest/miniconda.html).
 
 ### 1) Add code command for opening VS Code in Terminal
 
@@ -31,7 +39,7 @@
 
 
 ### 3) Clone this repo as well as create and modify .env file
-1. open Terminal and execute:
+1. open terminal and execute:
 ```
     cd PATH/TO/YOUR/PROJECTS/FOLDER
     mkdir project_creation_automation
@@ -48,76 +56,23 @@
 * Save and close the .env file.
 Copy the project_creation_automation folder into the desired path for new projects.
 
-### 4) create my_commands.sh file
-* The my_commands.sh file contains custom terminal commands.
-* Save this file in your projects folder if you plan to add more custom commands in the future
-or directly in the project_creation_automation folder:
-1. open Terminal and execute:
-```
-    cd PATH/TO/YOUR/DESIRED/FOLDER/LOCATION/FOR/THE/CUSTOM_COMMANDS_FILE
-    touch my_commands.sh
-    open my_commands.sh
-```
-
-2. Copy the following function into the file:
-```
-    #!/bin/bash
-    function create() {
-        # Uses the create.py file to create a new python project folder
-        # as well as a README.md and .gitignore file.
-        # write create public NAME_OF_NEW_REPO for a new public repo
-        # write create NAME_OF_NEW_REPO for a new private repo
-
-        if [ "$1" != "public" ]
-            then
-                project_name=$1
-                privacy="private"
-                shift 1
-        elif [ condition ]
-            then
-                project_name=$2
-                privacy="public"
-                shift 2
-        fi
-
-        mkdir $FP/$project_name
-        mkdir $FP/$project_name/.vscode
-
-        cd $FP/$project_name
-        conda create --prefix $FP/$project_name/env python=3.10 -y
-        conda activate $FP/$project_name/env
-        for package in $*
-            pip install $package
-        conda deactivate
-
-        python $FP/project_creation_automation/create.py $privacy $project_name
-
-        git init
-        git remote add origin git@github.com:$UN/$project_name.git
-        git add .
-        git commit -m "initial commit"
-        git push -u origin master
-        code .
-    }
-```
-
-### 5) Modify .zshrc file
+### 4) Modify .zshrc file
 * If you use Mac OS Mojave or older, do the following with the .bashrc file!
-1. open Terminal and execute:
+1. open terminal and execute:
 ```
     touch ~/.zshrc
     open ~/.zshrc
 ```
-2. Add a new line with "source /PATH/TO/YOUR/MY_COMMANDS_FILE/my_commands.sh"
-3. Add a new line with "source /PATH/TO/YOUR/.ENV_FILE/.env"
+2. Add a new line with "source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/my_commands.sh"
+3. Add a new line with "source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/.ENV_FILE/.env"
 
-### 6) Attention:
-* Changing the location of the .env or my_commands.sh file will break the procedure.
-* If changed, the paths in the .zshrc and the .env file must be respecified.
+### 5) Attention:
+* Changing the location of the .env or my_commands.sh file (or of the projects folder) will break the procedure.
+* If changed, the paths to (or in) the .zshrc and the .env files must be respecified.
 
-### 7) ENV File Format:
+### 6) ENV File Format:
 ```
 UN="Username123"
 PW="Password123"
-FP="DESIRED/PATH/TO/NEW/Projects/"
+FP="DESIRED/PATH/TO/NEW/PROJECTS/"
 ```
