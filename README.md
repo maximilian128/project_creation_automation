@@ -6,8 +6,8 @@
 
 ## Usage:
 
-* To create and initialize a new project open the terminal and type
-    'create <name_of_your_project>' for a private repository
+* To create and initialize a new project open the terminal and type\
+    'create <name_of_your_project>' for a private repository\
     'create public <name_of_your_project> for a public reppository
 
 ## Installation for Mac OS
@@ -43,7 +43,7 @@
 ```
 2. Store your username, password, and desired path for new projects.
 * The password is the generated token.
-* The path must NOT end with a forward slash (/)
+* The path must NOT end with a forward slash (/).
 * Use the provided format at the bottom of this README.
 * Save and close the .env file.
 Copy the project_creation_automation folder into the desired path for new projects.
@@ -112,10 +112,8 @@ or directly in the project_creation_automation folder:
 3. Add a new line with "source /PATH/TO/YOUR/.ENV_FILE/.env"
 
 ### 6) Attention:
-```
 * Changing the location of the .env or my_commands.sh file will break the procedure.
 * If changed, the paths in the .zshrc and the .env file must be respecified.
-```
 
 ### 7) ENV File Format:
 ```
