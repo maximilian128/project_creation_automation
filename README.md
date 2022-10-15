@@ -10,7 +10,8 @@
 * To create and initialize a new project open the terminal and type\
     'create <name_of_your_project> <name_of_packages_to_install>' for a private repository\
     'create public <name_of_your_project> <name_of_packages_to_install> for a public reppository
-* The packages need to be seperated by spaces
+* The packages need to be seperated by spaces.
++ Make sure to spell the command correctly. There is no checking.
 
 ### Example:
 ```
@@ -41,7 +42,7 @@ create public this_is_a_new_project numpy pandas matplotlib
 
 
 ### 3) Clone this repo as well as create and modify .env file
-1. open terminal and execute:
+1. Open terminal and execute:
 ```
     cd PATH/TO/YOUR/PROJECTS/FOLDER
     mkdir project_creation_automation
@@ -56,11 +57,10 @@ create public this_is_a_new_project numpy pandas matplotlib
 * The path must NOT end with a forward slash (/).
 * Use the provided format at the bottom of this README.
 * Save and close the .env file.
-Copy the project_creation_automation folder into the desired path for new projects.
 
 ### 4) Modify .zshrc file
 * If you use Mac OS Mojave or older, do the following with the .bashrc file!
-1. open terminal and execute:
+1. Open terminal and execute:
 ```
     touch ~/.zshrc
     open ~/.zshrc
