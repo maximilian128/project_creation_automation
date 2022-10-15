@@ -11,7 +11,6 @@ function create() {
             privacy="private"
             shift 1
     else
-        then
             project_name=$2
             privacy="public"
             shift 2
