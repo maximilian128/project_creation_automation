@@ -1,15 +1,16 @@
+from os import getenv
 import sys
-import os
 
 from dotenv import load_dotenv
 from github import Github
 
+
 def create():
 
     load_dotenv()
-    path = os.getenv("FP")
-    username = os.getenv("UN")
-    password = os.getenv("PW")
+    path = getenv("FP")
+    username = getenv("UN")
+    token = getenv("TK")
     
     if str(sys.argv[1]) == "private":
         privacy = True
@@ -40,7 +41,7 @@ def create():
             '}'
         ])
 
-    user = Github(username, password).get_user()
+    user = Github(username, token).get_user()
     user.create_repo(project_name, private=privacy)
     print(f"\n Succesfully created project {project_name} \n")
 
