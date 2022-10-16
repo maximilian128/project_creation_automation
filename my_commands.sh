@@ -36,6 +36,45 @@ function create() {
     code .
 }
 
-function delete() {
-    echo placeholdertext
+function delete_repo() {
+    project_name=$1
+    echo
+    echo "Do you really want do delete the git repository of project $project_name?"
+    echo "Type 'name_of_project' for deleting and 'no' for aborting deletion."
+    while true; do
+        read input
+        echo
+        case $input in
+            $project_name )
+                python $FP/project_creation_automation/delete.py $project_name
+                break;;
+            no )
+                echo "Aborted deletion!"
+                break;;
+            * ) echo "Please answer 'name_of_project' or 'no'.";;
+        esac
+    done
+}
+
+function delete_complete_project() {
+    project_name=$1
+    echo
+    echo "Do you really want do delete the ENTIRE project $project_name? including LOCAL files?"
+    echo "There is no going back after deleting!"
+    echo "Type 'name_of_project' for deleting and 'no' for aborting deletion."
+    while true; do
+        read input
+        echo
+        case $input in
+            $project_name )
+                python $FP/project_creation_automation/delete.py $project_name
+                rm -rf $FP/$project_name
+                echo "All local files deleted."
+                break;;
+            no )
+                echo "Aborted deletion!"
+                break;;
+            * ) echo "Please answer 'name_of_project' or 'no'.";;
+        esac
+    done
 }
