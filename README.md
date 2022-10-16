@@ -1,9 +1,10 @@
 # Project information
 
-* Inspired by Kalle Hallden's [ProjectInitializationAutomation](https://github.com/KalleHallden/ProjectInitializationAutomation).
-* With this project you can use the terminal to create new Python projects and initialize GitHub repositories.
-* A conda environment is created within the projects folder.
-* Build for Mac OS.
+* With this project you can use the terminal to create new Python projects and initialize GitHub repositories as well as delete existing projects.
+* When creating a new project, a conda environment is created within the project folder.
+
++ Build for Mac OS.
++ Inspired by Kalle Hallden's [ProjectInitializationAutomation](https://github.com/KalleHallden/ProjectInitializationAutomation).
 
 ## Usage:
 
@@ -11,17 +12,39 @@
     'create <name_of_your_project> <name_of_packages_to_install>' for a private repository\
     'create public <name_of_your_project> <name_of_packages_to_install> for a public reppository
 * The packages need to be seperated by spaces.
-+ Make sure to spell the command correctly. There is no checking.
+* Projects must be named without spaces. ("new_project" instead of "new project")
+
++ To delete a git repository open the terminal and type\
+    'delete_repo <name_of_repo_to_delete>'
++ To delete a complete project (git repository AND local files) open terminal and type\
+    'delete_complete_project <name_of_project_to_delete>'
+
+* Make sure to spell the commands correctly. There is no checking.
 
 ### Example:
+* The following command creates a new public project called "this_is_a_new_project" and installs numpy, pandas and matplotlib in the conda environment:
 ```
 create public this_is_a_new_project numpy pandas matplotlib
 ```
-* This command creates a new public project called "this_is_a_new_project" and installs numpy, pandas and matplotlib in the conda environment.
+
+* The following command deletes a repository called "this_is_a_repo":
+```
+delete_repo this_is_a_repo
+```
+
+* The following command deletes a complete project (git repository and all local files) called "this_is_a_project":
+```
+delete_repo this_is_a_project
+```
+
 
 ## Installation for Mac OS
 
-* You need to have miniconda installed. See [minconda installation](https://docs.conda.io/en/latest/miniconda.html).
+* For the create functionality, you need to have miniconda installed. See [minconda installation](https://docs.conda.io/en/latest/miniconda.html).
+* If you have Google Chrome installed, you need to install Chromedriver for the delete functionality to work. Install with [Homebrew](https://formulae.brew.sh/cask/chromedriver) or [manually](https://sites.google.com/chromium.org/driver/downloads).
+* Maybe Mac OS won't allow Chromedriver to operate. To give permission, open settings, navigate to "Security and Privacy" and click on the "alllow" button in the bottom half of the page.
+* The buttom will be displayed after the first try to use the delete functionality.
+* Both functionalities work independently, e.g. you do not need to install Chromedriver if you are using the create functionality only.
 
 ### 1) Add code command for opening VS Code in Terminal
 
@@ -78,6 +101,7 @@ source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/.env
 ### 6) ENV File Format:
 ```
 UN="Username123"
+TK="Token123"
 PW="Password123"
 FP="DESIRED/PATH/TO/NEW/PROJECTS/"
 ```
