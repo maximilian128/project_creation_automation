@@ -13,30 +13,33 @@ class Creator():
     def __init__(self, user: User) -> None:
         self.user = user
 
-    def create(self, project_name: str = "", privacy: bool = True):
+    def create(self, project_name: str, privacy: bool):
         project_folder_path = self.user.path + "/" + project_name
 
-        with open(project_folder_path + '/README.md', 'w') as f:
-            f.write(f"# {project_name}")
-            
-        with open(project_folder_path + '/.gitignore', 'w') as f:
-            f.writelines([
-                "*.pyc\n",
-                "*~\n",
-                "__pycache__\n",
-                ".DS_Store\n",
-                ".vscode\n",
-                ".env\n",
-                "env"
-            ])
-        with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
-            f.writelines([
-                '{ \n',
-                '    "python.terminal.activateEnvironment": true,\n',
-                f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python",\n',
-                '    "python.analysis.typeCheckingMode": "off"\n',
-                '}'
-            ])
+        try:
+            with open(project_folder_path + '/README.md', 'w') as f:
+                f.write(f"# {project_name}")
+
+            with open(project_folder_path + '/.gitignore', 'w') as f:
+                f.writelines([
+                    "*.pyc\n",
+                    "*~\n",
+                    "__pycache__\n",
+                    ".DS_Store\n",
+                    ".vscode\n",
+                    ".env\n",
+                    "env"
+                ])
+            with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
+                f.writelines([
+                    '{ \n',
+                    '    "python.terminal.activateEnvironment": true,\n',
+                    f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python",\n',
+                    '    "python.analysis.typeCheckingMode": "off"\n',
+                    '}'
+                ])
+        except:
+            pass
 
         user = Github(self.user.username, self.user.token).get_user()
         user.create_repo(project_name, private=privacy)
@@ -50,7 +53,7 @@ class User():
         self.path = path
 
 
-def main():
+def main(project_name: str, privacy: bool):
     # Create user instance and pass username, token and path to projects folder
     load_dotenv()
     path = getenv("FP")
@@ -58,12 +61,16 @@ def main():
     token = getenv("TK")
     user = User(username, token, path)
 
-    if str(sys.argv[1]) == "private":
-        privacy = True
-    else:
-        privacy = False
-
-    project_name = str(sys.argv[2])
+    # Try Except so that we can run the file for testing purposes from an IDE without a terminal.
+    # If run from terminal, project_name and privacy will be reassigned
+    try:
+        if str(sys.argv[1]) == "private":
+            privacy = True
+        else:
+            privacy = False
+        project_name = str(sys.argv[2])
+    except:
+        pass
     
     # Create Creator instance and pass project name, path to project, selected privacy (public or private repository)
     creator = Creator(user)
@@ -71,4 +78,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # project_name and privacy can be set for testing purposes
+    # for full testing, a folder for the prject has to be created.
+    # Otherwise the creation of README.md, .gitignore and settings.json file will not be tested.
+    main("test_project_1", False)

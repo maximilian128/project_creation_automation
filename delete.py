@@ -86,19 +86,19 @@ class User():
         self.password = password
 
 
-def main(wait_period) -> None:
-    # Try Except so that we can run the file for testing purposes from an IDE without a terminal.
-    # Set the project name for testing this file in the except block!
-    try:
-        project_name = str(sys.argv[1])
-    except:
-        project_name = "ddd"
-
+def main(project_name: str, wait_period: int) -> None:
     # Create user instance and pass username and password
     load_dotenv()
     username = getenv("UN")
     password = getenv("PW")
     user = User(username, password)
+
+    # Try Except so that we can run the file for testing purposes from an IDE without a terminal.
+    # If run from terminal, project_name will be reassigned
+    try:
+        project_name = str(sys.argv[1])
+    except:
+        pass
 
     # Select the browser. Chrome is first choice, because of the option to hide the browser.
     if exists("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"):
@@ -115,4 +115,6 @@ def main(wait_period) -> None:
 
 
 if __name__ == "__main__":
-    main(wait_period=0)
+    # wait_period: before driver gets closed at the end
+    # project_name can be set for testing purposes
+    main(wait_period=0, project_name="test_project_1")
