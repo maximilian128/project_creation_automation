@@ -16,8 +16,8 @@ function create() {
             shift 2
     fi
 
-    mkdir $FP/$project_name
-    mkdir $FP/$project_name/.vscode
+    python $FP/project_creation_automation/create.py $privacy $project_name
+    # python file creates "$FP/project_name/.vscode" folder, among doing other things
 
     cd $FP/$project_name
     conda create --prefix $FP/$project_name/env python=3 -y
@@ -26,14 +26,15 @@ function create() {
         pip install $package
     conda deactivate
 
-    python $FP/project_creation_automation/create.py $privacy $project_name
-
     git init
     git remote add origin git@github.com:$UN/$project_name.git
     git add .
     git commit -m "initial commit"
     git push -u origin master
     code .
+    echo
+    echo "Succesfully created project $project_name."
+    echo
 }
 
 function delete_repo() {
