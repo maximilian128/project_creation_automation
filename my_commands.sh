@@ -46,6 +46,7 @@ function delete_repo() {
         echo
         case $input in
             $project_name )
+                echo "Please wait."
                 python $FP/project_creation_automation/delete.py $project_name
                 break;;
             no )
@@ -67,9 +68,10 @@ function delete_complete_project() {
         echo
         case $input in
             $project_name )
+                echo "Please wait."
                 python $FP/project_creation_automation/delete.py $project_name
                 rm -rf $FP/$project_name
-                echo "All local files deleted."
+                echo "All local project files deleted."
                 break;;
             no )
                 echo "Aborted deletion!"
