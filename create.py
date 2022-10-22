@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from os import path, makedirs
+from subprocess import run
 import sys
 
 from github import Github
@@ -24,28 +25,12 @@ class Creator():
         except FileExistsError as e:
             print(f"A project called {project_name} already exists.")
 
-        # TODO copy files from custom_files folder instead of writing them here
         with open(project_folder_path + '/README.md', 'w') as f:
             f.write(f"# {project_name}")
 
-        with open(project_folder_path + '/.gitignore', 'w') as f:
-            f.writelines([
-                "*.pyc\n",
-                "*~\n",
-                "__pycache__\n",
-                ".DS_Store\n",
-                ".vscode\n",
-                ".env\n",
-                "env"
-            ])
-        with open(project_folder_path + "/.vscode/settings.json", 'w') as f:
-            f.writelines([
-                '{ \n',
-                '    "python.terminal.activateEnvironment": true,\n',
-                f'    "python.defaultInterpreterPath": "{project_folder_path}/env/bin/python",\n',
-                '    "python.analysis.typeCheckingMode": "off"\n',
-                '}'
-            ])
+        # copy files from custom_files folder
+        run(["cp", path.dirname(__file__) + "/custom_files/gitignore.txt", project_folder_path + "/.gitignore"])
+        run(["cp", path.dirname(__file__) + "/custom_files/settings.json", project_folder_path + "/.vscode/settings.json"])
 
         try:
             user = Github(self.user.username, self.user.token).get_user()
