@@ -13,6 +13,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from logger import logger
 from user import User
 
 
@@ -40,7 +41,7 @@ class Remover():
 
         # Check if page (and therefore project) is not found:
         if "Page not found" in self.driver.title:
-            print(f"\nThe project {project_name} could not be found on Github!")
+            logger.error(f"The project {project_name} could not be found on Github!")
         else:
             # Wait until "Delete this repository" button is available and click on it.
             delete_this_repository_button = self.get_element(By.XPATH, value="//*[@id='options_bucket']/div[9]/ul/li[4]/details/summary")
@@ -54,7 +55,7 @@ class Remover():
             final_delete_button = self.get_element(By.XPATH, value="//*[@id='options_bucket']/div[9]/ul/li[4]/details/details-dialog/div[3]/form/button")
             final_delete_button.click()
 
-            print(f"The project {project_name} was removed from Github.")
+            logger.info(f"The project {project_name} was removed from Github.")
 
         sleep(wait_period)
         self.driver.quit()
@@ -71,6 +72,7 @@ class Remover():
         try:
             return WebDriverWait(self.driver, wait_for).until(EC.presence_of_element_located((get_by, value)))
         except TimeoutException as e:
+            logger.error(e)
             print(e.msg)
             self.driver.quit()
 
@@ -82,8 +84,8 @@ def main(project_name: str, wait_period: int, option: str = "--headless") -> Non
     # If run from terminal, project_name will be reassigned
     try:
         project_name = str(sys.argv[1])
-    except:
-        print("File runs from IDE. No parameters were given.")
+    except IndexError as e:
+        logger.info("File runs from IDE. No parameters were given.")
 
     # Select the browser. Chrome is first choice, because of the option to hide the browser.
     if exists("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"):
@@ -96,7 +98,6 @@ def main(project_name: str, wait_period: int, option: str = "--headless") -> Non
     # Create Remover instance and call "delete_project" function
     remover = Remover(driver, user)
     remover.delete_git_repo(project_name, wait_period)
-
 
 
 if __name__ == "__main__":

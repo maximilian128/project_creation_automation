@@ -3,6 +3,9 @@ from typing_extensions import Self
 from dotenv import load_dotenv
 from dataclasses import dataclass
 from os import getenv
+from pathlib import Path
+
+from logger import logger
 
 
 @dataclass
@@ -34,4 +37,5 @@ class User():
 
 
 if __name__ == "__main__":
-    print(User.by_dot_env())
+    user = User.by_dot_env()
+    print(user)
