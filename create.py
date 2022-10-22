@@ -2,11 +2,13 @@
 # release on 24th October 2022
 from __future__ import annotations
 
-from os import getenv, makedirs
+from os import path, makedirs
 import sys
 
-from dotenv import load_dotenv
 from github import Github
+from github.GithubException import GithubException, BadCredentialsException
+
+from user import User
 
 
 class Creator():
@@ -14,9 +16,15 @@ class Creator():
         self.user = user
 
     def create(self, project_name: str, privacy: bool):
+        # TODO edit path with os.path module
         project_folder_path = self.user.path + "/" + project_name
-        makedirs(project_folder_path + "/" + ".vscode")
 
+        try:
+            makedirs(project_folder_path + "/" + ".vscode")
+        except FileExistsError as e:
+            print(f"A project called {project_name} already exists.")
+
+        # TODO copy files from custom_files folder instead of writing them here
         with open(project_folder_path + '/README.md', 'w') as f:
             f.write(f"# {project_name}")
 
@@ -39,23 +47,27 @@ class Creator():
                 '}'
             ])
 
-        user = Github(self.user.username, self.user.token).get_user()
-        user.create_repo(project_name, private=privacy)
+        try:
+            user = Github(self.user.username, self.user.token).get_user()
+        except BadCredentialsException as e:
+            print("Wrong login credentials.")
+        try:
+            user.create_repo(project_name, private=privacy)
+        except GithubException as e:
+            print(f"A repository called {project_name} already exists.")
 
-class User():
-    def __init__(self, username, token, path) -> None:
-        self.username = username
-        self.token = token
-        self.path = path
 
 
 def main(project_name: str, privacy: bool):
-    # Create user instance and pass username, token and path to projects folder
-    load_dotenv()
-    path = getenv("FP")
-    username = getenv("UN")
-    token = getenv("TK")
-    user = User(username, token, path)
+    """
+    Main function controlling the creation of a new project.
+
+    Args:
+    ----
+        project_name (str): Name of the newproject.
+        privacy (bool): True equals privat repository, false equals public repository.
+    """
+    user = User.by_dot_env()
 
     # Try Except so that we can run the file for testing purposes from an IDE without a terminal.
     # If run from terminal, project_name and privacy will be reassigned
@@ -65,8 +77,8 @@ def main(project_name: str, privacy: bool):
         else:
             privacy = False
         project_name = str(sys.argv[2])
-    except:
-        pass
+    except IndexError as e:
+        print("File runs from IDE. No parameters were given.")
     
     # Create Creator instance and pass project name, path to project, selected privacy (public or private repository)
     creator = Creator(user)
