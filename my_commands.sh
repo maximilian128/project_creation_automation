@@ -16,8 +16,8 @@ function create() {
             shift 2
     fi
 
-    python $FP/project_creation_automation/create.py $privacy $project_name
     # python file creates "$FP/project_name/.vscode" folder, among doing other things
+    python $FP/project_creation_automation/create.py $privacy $project_name
 
     cd $FP/$project_name
     conda create --prefix $FP/$project_name/env python=3 -y
@@ -73,6 +73,7 @@ function delete_complete_project() {
                 python $FP/project_creation_automation/delete.py $project_name
                 rm -rf $FP/$project_name
                 echo "All local project files deleted."
+                echo
                 break;;
             no )
                 echo "Aborted deletion!"
