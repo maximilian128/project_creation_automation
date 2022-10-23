@@ -1,10 +1,13 @@
-# importing this file creates a Logger called logger, which can be used in the file which imports.
+# importing this file creates a Logger instance "logger"
+# logger has the name of the file which imports logger.py
+# logger can be used in the file which imports
 
 import logging
 import inspect
 
 
 # Formatter subclass that never prints tracebacks, even when logger.exception() is called.
+# This overrides the NoTracebackFormatter and formatException methods in the logging.Formatter class
 class NoTracebackFormatter(logging.Formatter):
     def format(self, record):
         record.exc_text = "" # ensures formatException gets called
