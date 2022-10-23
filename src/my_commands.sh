@@ -1,8 +1,7 @@
 #!/bin/bash
 
 function create() {
-    # Uses the create.py file to create a new python project folder
-    # as well as a README.md and .gitignore file.
+    # Uses the create.py file to create a new python project folder.
     # Usage explained in README.md file.
 
     if [ "$1" != "public" ]
@@ -16,25 +15,7 @@ function create() {
             shift 2
     fi
 
-    # python file creates "$FP/project_name/.vscode" folder, among doing other things
-    python $FP/project_creation_automation/create.py $privacy $project_name
-
-    cd $FP/$project_name
-    conda create --prefix $FP/$project_name/env python=3 -y
-    conda activate $FP/$project_name/env
-    for package in $*
-        pip install $package
-    conda deactivate
-
-    git init
-    git remote add origin git@github.com:$UN/$project_name.git
-    git add .
-    git commit -m "initial commit"
-    git push -u origin master
-    code .
-    echo
-    echo "Succesfully created project $project_name."
-    echo
+    python $FP/project_creation_automation/src/create.py $privacy $project_name $*
 }
 
 function delete_repo() {
@@ -48,7 +29,7 @@ function delete_repo() {
         case $input in
             $project_name )
                 echo "Please wait."
-                python $FP/project_creation_automation/delete.py $project_name
+                python $FP/project_creation_automation/src/delete.py $project_name
                 break;;
             no )
                 echo "Aborted deletion!"
@@ -70,7 +51,7 @@ function delete_complete_project() {
         case $input in
             $project_name )
                 echo "Please wait."
-                python $FP/project_creation_automation/delete.py $project_name
+                python $FP/project_creation_automation/src/delete.py $project_name
                 rm -rf $FP/$project_name
                 echo "All local project files deleted."
                 echo
