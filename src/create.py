@@ -2,10 +2,9 @@
 # release on 24th October 2022
 from __future__ import annotations
 
-from os import makedirs
 from pathlib import Path
 from subprocess import run
-import sys
+from sys import argv
 
 from github import Github
 from github.GithubException import GithubException, BadCredentialsException
@@ -35,40 +34,52 @@ class Creator():
                 command_as_list.append(section)
         return command_as_list
 
-    def create_new_project(self, project_name: str, privacy: bool, packages_to_install: list):
+    def create_new_project(self, project_name: str, privacy: bool, packages_to_install: list[str]):
         project_folder_path = self.get_project_folder_path(project_name)
 
         self.create_local_files(project_name, project_folder_path)
-        # self.create_conda__env(project_name, project_folder_path, packages_to_install)
+        self.create_conda__env(project_name, project_folder_path, packages_to_install)
         self.create_git_repo(project_name, privacy)
         self.add_repo_to_local_files(project_name, project_folder_path)
 
-        logger.info(f"SSuccesfully created project {project_name}.")
+        print()
+        logger.info(f"Succesfully created project {project_name}.")
+        logger.info(f"Installed packages {packages_to_install}.")
 
-    def get_project_folder_path(self, project_name):
-        return self.user.path + "/" + project_name
+    def get_project_folder_path(self, project_name: str) -> Path:
+        return Path(self.user.path) / project_name
 
-    def create_local_files(self, project_name: str, project_folder_path: str):
+    def create_local_files(self, project_name: str, project_folder_path: Path):
         try:
-            makedirs(project_folder_path + "/" + ".vscode")
-            makedirs(project_folder_path + "/" + "src")
+            # create directories
+            project_folder_path.mkdir()
+            (project_folder_path / ".vscode").mkdir()
+            (project_folder_path / "src").mkdir()
+
+            # create files
+            (project_folder_path / "project_TODO_overview.txt").touch()
+            (project_folder_path / "README.md").touch()
+
+            # write initial text to files
+            (project_folder_path / "project_TODO_overview.txt").write_text(f"Project goals and way to get there:")
+            (project_folder_path / "README.md").write_text(f"# {project_name}")
+
+            # copy files from custom_files folder
+            run(["cp", str(Path(__file__).parent.parent / "custom_files" / "gitignore.txt"), project_folder_path / ".gitignore"])
+            run(["cp", str(Path(__file__).parent.parent / "custom_files" / "settings.json"), project_folder_path / ".vscode" / "settings.json"])
+
         except FileExistsError as e:
+            # if the project directory already exists none of the above directories and files get created in try block.
             logger.warning(f"A project called {project_name} already exists.")
 
-        with open(project_folder_path + '/README.md', 'w') as f:
-            f.write(f"# {project_name}")
-
-        # copy files from custom_files folder
-        run(["cp", str(Path(__file__).parent.parent / "custom_files" / "gitignore.txt"), project_folder_path + "/.gitignore"])
-        run(["cp", str(Path(__file__).parent.parent / "custom_files" / "settings.json"), project_folder_path + "/.vscode/settings.json"])
-
-    def create_conda__env(self, project_name: str, project_folder_path: str, packages_to_install: list):
+    def create_conda__env(self, project_name: str, project_folder_path: Path, packages_to_install: list[str]):
 
         packages_string = ' '.join(map(str, packages_to_install))
 
-        run(self.create_shell_comand_list(f"conda create --prefix {project_folder_path}/env python=3 -y"))
+        env_path = project_folder_path / "env"
+        run(self.create_shell_comand_list(f"conda create --prefix {env_path} python=3 -y"))
         if packages_to_install != []:
-            run(self.create_shell_comand_list(f"conda run -p {project_folder_path}/env pip install {packages_string}"))
+            run(self.create_shell_comand_list(f"conda run -p {env_path} pip install {packages_string}"))
 
 
     def create_git_repo(self, project_name: str, privacy: bool):
@@ -81,7 +92,7 @@ class Creator():
         except GithubException as e:
             logger.warning(f"A repository called {project_name} already exists.")
 
-    def add_repo_to_local_files(self, project_name: str, project_folder_path: str):
+    def add_repo_to_local_files(self, project_name: str, project_folder_path: Path):
         run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git init"))
         run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git remote add origin git@github.com:{self.user.username}/{project_name}.git"))
         run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git add ."))
@@ -91,7 +102,7 @@ class Creator():
 
 
 
-def main(project_name: str, privacy: bool = True, packages_to_install: list = []):
+def main(project_name: str, privacy: bool = True, packages_to_install: list[str] = []):
     """
     Main function controlling the creation of a new project.
 
@@ -105,11 +116,11 @@ def main(project_name: str, privacy: bool = True, packages_to_install: list = []
     # Try Except so that we can run the file for testing purposes from an IDE without a terminal.
     # If run from terminal, project_name and privacy will be reassigned
     try:
-        if str(sys.argv[1]) == "public":
+        if str(argv[1]) == "public":
             privacy = False
-        project_name = str(sys.argv[2])
+        project_name = str(argv[2])
         packages_to_install = []
-        for package in sys.argv[3:]:
+        for package in argv[3:]:
             packages_to_install.append(package)
     except IndexError as e:
         logger.info("File runs from IDE. No parameters were given.")
