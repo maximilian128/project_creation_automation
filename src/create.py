@@ -9,6 +9,7 @@ from sys import argv
 from github import Github
 from github.GithubException import GithubException, BadCredentialsException
 
+from helper import create_shell_comand_list, get_project_folder_path
 from logger import logger
 from user import User
 
@@ -17,25 +18,8 @@ class Creator():
     def __init__(self, user: User) -> None:
         self.user = user
 
-
-    def create_shell_comand_list(self, command_string: str):
-        """ Paths in command_String can be quoted with ' but they don't have to.
-            If paths include spaces they must be separated by '!
-            If command includes ' and ' is not used to separate a path then this method will fail!
-        """
-        command_as_list = []
-        sections = command_string.split("'")
-        for number, section in enumerate(sections):
-            if number % 2 == 0:
-                for part in section.split(" "):
-                    if part != "":
-                        command_as_list.append(part)
-            else:
-                command_as_list.append(section)
-        return command_as_list
-
     def create_new_project(self, project_name: str, privacy: bool, packages_to_install: list[str]):
-        project_folder_path = self.get_project_folder_path(project_name)
+        project_folder_path = get_project_folder_path(project_name)
 
         self.create_local_files(project_name, project_folder_path)
         self.create_conda__env(project_name, project_folder_path, packages_to_install)
@@ -45,9 +29,6 @@ class Creator():
         print()
         logger.info(f"Succesfully created project {project_name}.")
         logger.info(f"Installed packages {packages_to_install}.")
-
-    def get_project_folder_path(self, project_name: str) -> Path:
-        return Path(self.user.path) / project_name
 
     def create_local_files(self, project_name: str, project_folder_path: Path):
         try:
@@ -77,9 +58,9 @@ class Creator():
         packages_string = ' '.join(map(str, packages_to_install))
 
         env_path = project_folder_path / "env"
-        run(self.create_shell_comand_list(f"conda create --prefix {env_path} python=3 -y"))
+        run(create_shell_comand_list(f"conda create --prefix {env_path} python=3 -y"))
         if packages_to_install != []:
-            run(self.create_shell_comand_list(f"conda run -p {env_path} pip install {packages_string}"))
+            run(create_shell_comand_list(f"conda run -p {env_path} pip install {packages_string}"))
 
 
     def create_git_repo(self, project_name: str, privacy: bool):
@@ -93,12 +74,12 @@ class Creator():
             logger.warning(f"A repository called {project_name} already exists.")
 
     def add_repo_to_local_files(self, project_name: str, project_folder_path: Path):
-        run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git init"))
-        run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git remote add origin git@github.com:{self.user.username}/{project_name}.git"))
-        run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git add ."))
-        run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git commit -m 'initial commit'"))
-        run(cwd=project_folder_path, args=self.create_shell_comand_list(f"git push -u origin master"))
-        run(cwd=project_folder_path, args=self.create_shell_comand_list(f"code ."))
+        run(cwd=project_folder_path, args=create_shell_comand_list(f"git init"))
+        run(cwd=project_folder_path, args=create_shell_comand_list(f"git remote add origin git@github.com:{self.user.username}/{project_name}.git"))
+        run(cwd=project_folder_path, args=create_shell_comand_list(f"git add ."))
+        run(cwd=project_folder_path, args=create_shell_comand_list(f"git commit -m 'initial commit'"))
+        run(cwd=project_folder_path, args=create_shell_comand_list(f"git push -u origin master"))
+        run(cwd=project_folder_path, args=create_shell_comand_list(f"code ."))
 
 
 
