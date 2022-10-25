@@ -25,7 +25,7 @@ class Creator():
         else:
             logger.info("File runs from IDE. No parameters were given.")
 
-        project_folder_path = get_project_folder_path(self.user.path, project_name)
+        project_folder_path = get_project_folder_path(self.user.projects_path, project_name)
         self.create_local_files(project_name, project_folder_path)
         self.create_conda__env(project_name, project_folder_path, packages_to_install)
         self.create_git_repo(project_name, privacy)

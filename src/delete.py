@@ -32,7 +32,7 @@ class Remover():
         else:
             logger.info("File runs from IDE. No parameters were given.")
 
-        project_folder_path = get_project_folder_path(self.user.path, project_name)
+        project_folder_path = get_project_folder_path(self.user.projects_path, project_name)
         self.delete_git_repo(project_name)
         if del_local:
             self.delete_local_files(project_folder_path)

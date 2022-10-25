@@ -12,10 +12,10 @@ class User():
     username: str
     password: str = ""
     token: str = ""
-    path: str = ""
+    projects_path: str = ""
 
     @classmethod
-    def by_dot_env(cls: Self, path: str = None) -> Self:
+    def by_dot_env(cls: Self, projects_path: str = None) -> Self:
         """
         Creates a user instance with information from a .env file.
 
@@ -27,12 +27,12 @@ class User():
         -------
             Self: Returns a User instance.
         """
-        load_dotenv(path)
+        load_dotenv(projects_path)
         username = getenv("UN")
         password = getenv("PW")
         token = getenv("TK")
-        path = getenv("FP")
-        return cls(username, password, token, path)
+        projects_path = getenv("FP")
+        return cls(username, password, token, projects_path)
 
 
 if __name__ == "__main__":
