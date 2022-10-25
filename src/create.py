@@ -20,23 +20,27 @@ class Creator():
 
     def create_new_project(self, project_name: str, privacy: bool, packages_to_install: list[str]):
         # if run from terminal, get_project_info gets called and reassigns variables
-        if len(argv) > 1:
-            project_name, privacy, packages_to_install = self.get_project_info()
-        else:
-            logger.info("File runs from IDE. No parameters were given.")
+        try:
+            if len(argv) > 1:
+                project_name, privacy, packages_to_install = self.get_project_info()
+            else:
+                logger.info("File runs from IDE. No parameters were given.")
 
-        project_folder_path = get_project_folder_path(self.user.projects_path, project_name)
-        self.create_local_files(project_name, project_folder_path)
-        self.create_conda__env(project_name, project_folder_path, packages_to_install)
-        self.create_git_repo(project_name, privacy)
-        self.add_repo_to_local_files(project_name, project_folder_path)
+            project_folder_path = get_project_folder_path(self.user.projects_path, project_name)
+            self.create_local_files(project_name, project_folder_path)
+            self.create_conda__env(project_name, project_folder_path, packages_to_install)
+            self.create_git_repo(project_name, privacy)
+            self.add_repo_to_local_files(project_name, project_folder_path)
 
-        # TODO check if everything was indeed successful
-        print()
-        logger.info(f"Succesfully created project {project_name}.")
-        if packages_to_install:
-            logger.info(f"Installed packages {packages_to_install}.")
-        print()
+            print()
+            logger.info(f"Succesfully created project {project_name}.")
+            if packages_to_install:
+                logger.info(f"Installed packages {packages_to_install}.")
+            print()
+
+        except Exception as e:
+            logger.exception("Something went wrong!")
+
 
     def create_local_files(self, project_name: str, project_folder_path: Path):
         try:
@@ -75,7 +79,8 @@ class Creator():
         try:
             git_user = Github(self.user.username, self.user.token).get_user()
         except BadCredentialsException as e:
-            logger.exception("Wrong login credentials.")
+            logger.exception("Username or token credentials are wrong.")
+            raise e
         try:
             git_user.create_repo(project_name, private=privacy)
         except GithubException as e:

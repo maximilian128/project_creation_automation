@@ -27,15 +27,18 @@ class Remover():
 
 
     def delete_project(self, project_name: str, del_local: bool = False):
-        if len(argv) > 1:
-            project_name, del_local = self.get_del_info()
-        else:
-            logger.info("File runs from IDE. No parameters were given.")
+        try:
+            if len(argv) > 1:
+                project_name, del_local = self.get_del_info()
+            else:
+                logger.info("File runs from IDE. No parameters were given.")
 
-        project_folder_path = get_project_folder_path(self.user.projects_path, project_name)
-        self.delete_git_repo(project_name)
-        if del_local:
-            self.delete_local_files(project_folder_path)
+            project_folder_path = get_project_folder_path(self.user.projects_path, project_name)
+            self.delete_git_repo(project_name)
+            if del_local:
+                self.delete_local_files(project_folder_path)
+        except Exception as e:
+            logger.exception("Something went wrong!")
 
 
     def delete_git_repo(self, project_name: str) -> None:
@@ -74,8 +77,11 @@ class Remover():
         self.driver.quit()
 
     def delete_local_files(self, project_folder_path: Path):
-        run(create_shell_comand_list(f"rm -rf {project_folder_path}"))
-        logger.info("All local files were deleted.")
+        if project_folder_path.exists():
+            run(create_shell_comand_list(f"rm -rf {project_folder_path}"))
+            logger.info("All local files were deleted.")
+        else:
+            logger.error(f"No local project called {project_folder_path.name}.")
 
     def get_web_element(self, get_by: str, value: str, wait_for:int = 10) -> WebElement:
         # ID = "id"
@@ -92,6 +98,7 @@ class Remover():
             logger.error(e)
             print(e.msg)
             self.driver.quit()
+            raise TimeoutException
     
     def get_driver(self, option: str):
         # Select the browser. Chrome is first choice, because of the option to hide the browser.
