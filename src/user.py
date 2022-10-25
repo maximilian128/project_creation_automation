@@ -1,4 +1,3 @@
-from typing import Type
 from typing_extensions import Self
 from dotenv import load_dotenv
 from dataclasses import dataclass
@@ -16,7 +15,7 @@ class User():
     path: str = ""
 
     @classmethod
-    def by_dot_env(cls: Type[Self], path: str = None) -> Self:
+    def by_dot_env(cls: Self, path: str = None) -> Self:
         """
         Creates a user instance with information from a .env file.
 
