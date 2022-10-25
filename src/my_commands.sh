@@ -15,13 +15,31 @@ function create() {
             shift 2
     fi
 
+    # $* are all the packages to install as separate strings
     python $FP/project_creation_automation/src/create.py $privacy $project_name $*
 }
 
 function delete_repo() {
     project_name=$1
-    echo
-    echo "Do you really want do delete the git repository of project $project_name?"
+    delete_project $project_name
+}
+
+function delete_project() {
+
+    if [ "$1" != "all" ]
+        then
+            project_name=$1
+            del_local="no"
+            echo
+            echo "Do you really want do delete the git repository of project $project_name?"
+    else
+            project_name=$2
+            del_local="yes"
+            echo
+            echo "Do you really want do delete the ENTIRE project $project_name? including LOCAL files?"
+            echo "There is no going back after deleting!"
+    fi
+
     echo "Type 'name_of_project' for deleting and 'no' for aborting deletion."
     while true; do
         read input
@@ -29,7 +47,7 @@ function delete_repo() {
         case $input in
             $project_name )
                 echo "Please wait."
-                python $FP/project_creation_automation/src/delete.py $project_name
+                python $FP/project_creation_automation/src/delete.py $del_local $project_name
                 break;;
             no )
                 echo "Aborted deletion!"
@@ -39,27 +57,5 @@ function delete_repo() {
     done
 }
 
-function delete_complete_project() {
-    project_name=$1
-    echo
-    echo "Do you really want do delete the ENTIRE project $project_name? including LOCAL files?"
-    echo "There is no going back after deleting!"
-    echo "Type 'name_of_project' for deleting and 'no' for aborting deletion."
-    while true; do
-        read input
-        echo
-        case $input in
-            $project_name )
-                echo "Please wait."
-                python $FP/project_creation_automation/src/delete.py $project_name
-                rm -rf $FP/$project_name
-                echo "All local project files deleted."
-                echo
-                break;;
-            no )
-                echo "Aborted deletion!"
-                break;;
-            * ) echo "Please answer 'name_of_project' or 'no'.";;
-        esac
-    done
-}
+# TODO make one delete function with optional flags --all, --repo, --local and call corresponding functions
+# functions could be delete_all, delete_repo, delete_local
