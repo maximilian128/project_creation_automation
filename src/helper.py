@@ -1,6 +1,6 @@
 from pathlib import Path
 
-def create_shell_comand_list(self, command_string: str):
+def create_shell_comand_list(command_string: str):
         """ Paths in command_String can be quoted with ' but they don't have to.
             If paths include spaces they must be separated by '!
             If command includes ' and ' is not used to separate a path then this method will fail!
@@ -16,5 +16,5 @@ def create_shell_comand_list(self, command_string: str):
                 command_as_list.append(section)
         return command_as_list
 
-def get_project_folder_path(self, project_name: str) -> Path:
-        return Path(self.user.path) / project_name
+def get_project_folder_path(user_path:str, project_name: str) -> Path:
+        return Path(user_path) / project_name
