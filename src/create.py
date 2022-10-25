@@ -19,16 +19,24 @@ class Creator():
         self.user = user
 
     def create_new_project(self, project_name: str, privacy: bool, packages_to_install: list[str]):
-        project_folder_path = get_project_folder_path(project_name)
+        # if run from terminal, get_project_info gets called and reassigns variables
+        if len(argv) > 1:
+            project_name, privacy, packages_to_install = self.get_project_info()
+        else:
+            logger.info("File runs from IDE. No parameters were given.")
 
+        project_folder_path = get_project_folder_path(self.user.path, project_name)
         self.create_local_files(project_name, project_folder_path)
         self.create_conda__env(project_name, project_folder_path, packages_to_install)
         self.create_git_repo(project_name, privacy)
         self.add_repo_to_local_files(project_name, project_folder_path)
 
+        # TODO check if everything was indeed successful
         print()
         logger.info(f"Succesfully created project {project_name}.")
-        logger.info(f"Installed packages {packages_to_install}.")
+        if packages_to_install:
+            logger.info(f"Installed packages {packages_to_install}.")
+        print()
 
     def create_local_files(self, project_name: str, project_folder_path: Path):
         try:
@@ -81,37 +89,28 @@ class Creator():
         run(cwd=project_folder_path, args=create_shell_comand_list(f"git push -u origin master"))
         run(cwd=project_folder_path, args=create_shell_comand_list(f"code ."))
 
-
-
-def main(project_name: str, privacy: bool = True, packages_to_install: list[str] = []):
-    """
-    Main function controlling the creation of a new project.
-
-    Args:
-    ----
-        project_name (str): Name of the newproject.
-        privacy (bool): True equals privat repository, False equals public repository.
-    """
-    user = User.by_dot_env()
-
-    # Try Except so that we can run the file for testing purposes from an IDE without a terminal.
-    # If run from terminal, project_name and privacy will be reassigned
-    try:
+    def get_project_info(self) -> tuple[str, bool, list]:
         if str(argv[1]) == "public":
             privacy = False
+        else:
+            privacy = True
         project_name = str(argv[2])
         packages_to_install = []
         for package in argv[3:]:
             packages_to_install.append(package)
-    except IndexError as e:
-        logger.info("File runs from IDE. No parameters were given.")
-    
-    # Create Creator instance and pass project name, selected privacy (public or private repository)
-    creator = Creator(user)
-    creator.create_new_project(project_name, privacy, packages_to_install)
-    
+        return project_name, privacy, packages_to_install
+
 
 
 if __name__ == "__main__":
-    # project_name and privacy can be set for testing purposes
-    main("test_project_1", privacy=True, packages_to_install=["numpy", "shapely"])
+    # project_name,privacy and packages_to_install can be set for testing purposes
+    # does not affect call from terminal (see get_project_info method)
+
+    project_name="test_project_1"
+    privacy=True
+    packages_to_install=["numpy", "shapely"]
+
+
+    user = User.by_dot_env()
+    creator = Creator(user)
+    creator.create_new_project(project_name, privacy, packages_to_install)

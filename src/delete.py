@@ -20,15 +20,19 @@ from user import User
 
 
 class Remover():
-    def __init__(self, driver: Chrome, user: User) -> None:
+    def __init__(self, user: User) -> None:
         # driver can be Safari webdriver, if Chrome is not installed
-        self.driver = driver
+        self.driver = self.get_driver("--headless")
         self.user = user
 
 
     def delete_project(self, project_name: str, del_local: bool = False):
-        project_folder_path = get_project_folder_path(self.user.path, project_name)
+        if len(argv) > 1:
+            project_name, del_local = self.get_del_info()
+        else:
+            logger.info("File runs from IDE. No parameters were given.")
 
+        project_folder_path = get_project_folder_path(self.user.path, project_name)
         self.delete_git_repo(project_name)
         if del_local:
             self.delete_local_files(project_folder_path)
@@ -88,48 +92,34 @@ class Remover():
             logger.error(e)
             print(e.msg)
             self.driver.quit()
+    
+    def get_driver(self, option: str):
+        # Select the browser. Chrome is first choice, because of the option to hide the browser.
+        if exists("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"):
+            options = ChromeOptions()
+            options.add_argument(option)
+            driver = Chrome(options=options)
+        else:
+            driver = Safari()
+        return driver
 
-
-def main(project_name: str, del_local: bool = False, option: str = "--headless") -> None:
-    """
-    Main function controlling the creation of a new project.
-
-    Parameters
-    ----------
-    project_name (str):
-        Name of the project to delete.
-    del_local (bool, optional):
-        Set to True if ALL local project files should get deleted. Defaults to False.
-    option (str, optional):
-        Options for the chrome driver. Defaults to "--headless".
-    """
-    user = User.by_dot_env()
-
-    # Try Except so that we can run the file for testing purposes from an IDE without a terminal.
-    # If run from terminal, project_name and del_local will be reassigned
-    try:
+    def get_del_info(self):
         if str(argv[1]) == "yes":
             del_local = True
         else:
             del_local = False
         project_name = str(argv[2])
-    except IndexError as e:
-        logger.info("File runs from IDE. No parameters were given.")
+        return project_name, del_local
 
-    # Select the browser. Chrome is first choice, because of the option to hide the browser.
-    if exists("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"):
-        options = ChromeOptions()
-        options.add_argument(option)
-        driver = Chrome(options=options)
-    else:
-        driver = Safari()
-
-    # Create Remover instance and call "delete_project" function
-    remover = Remover(driver, user)
-    remover.delete_project(project_name, del_local)
 
 
 if __name__ == "__main__":
     # project_name and del_local can be set for testing purposes
-    # does not affect call from terminal
-    main(project_name="test_project_1", del_local=True)
+    # does not affect call from terminal (see get_del_info method)
+
+    project_name = "test_project_1"
+    del_local = True
+
+    user = User.by_dot_env()
+    remover = Remover(user)
+    remover.delete_project(project_name, del_local)
