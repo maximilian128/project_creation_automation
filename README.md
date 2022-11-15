@@ -15,9 +15,11 @@
 * Projects must be named without spaces. ("new_project" instead of "new project")
 
 + To delete a git repository open the terminal and type\
-    'delete_repo <name_of_repo_to_delete>'
-+ To delete a complete project (git repository AND local files) open terminal and type\
-    'delete_complete_project <name_of_project_to_delete>'
+    'delete -p <name_of_repo_to_delete> -r'
++ To delete ALL LOCAL FILES of a project open the terminal and type\
+    'delete -p <name_of_project_to_delete> -l'
++ To delete a git repository and ALL LOCAL FILES open the terminal and type\
+    'delete -p <name_of_project_to_delete> -r -l'
 
 * Make sure to spell the commands correctly. There is no checking.
 
@@ -27,14 +29,9 @@
 create public this_is_a_new_project numpy pandas matplotlib
 ```
 
-* The following command deletes a repository called "this_is_a_repo":
+* The following command deletes all local files of a project called "this_is_a_repo":
 ```
-delete_repo this_is_a_repo
-```
-
-* The following command deletes a complete project (git repository and all local files) called "this_is_a_project":
-```
-delete_repo this_is_a_project
+delete -p this_is_a_repo -l
 ```
 
 
@@ -64,7 +61,7 @@ delete_repo this_is_a_project
 * Once closed, you can't see the token again and have to create a new one.
 
 
-### 3) Clone this repo as well as create and modify .env file
+### 3) Clone this repo and create and modify .env file
 1. Open terminal and execute:
 ```
     cd PATH/TO/YOUR/PROJECTS/FOLDER
@@ -94,11 +91,17 @@ source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/my_commands.sh
 source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/.env
 ```
 
-### 5) Attention:
+### 4) Modify custom files
+* in the custom_files folder in this project are a gitignore.txt and a settings.json file.
+* these files get copied to a newly created project.
+* modify these files according to your needs.
+* if you need more custom files in every new project, add them into the custom_files folder and modify the create_local_files method within the create.py file to specify where these files should get copied to.
+
+### Attention:
 * Changing the location of the .env or my_commands.sh file (or of the projects folder) will break the procedure.
 * If changed, the paths to (or in) the .zshrc and the .env files must be respecified.
 
-### 6) ENV File Format:
+### ENV File Format:
 ```
 UN="Username123"
 TK="Token123"

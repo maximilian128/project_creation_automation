@@ -1,5 +1,4 @@
 # annotaions import not necessary from Python 3.11 on
-# release on 24th October 2022
 from __future__ import annotations
 
 from os.path import exists
@@ -26,15 +25,17 @@ class Remover():
         self.user = user
 
 
-    def delete_project(self, project_name: str, del_local: bool = False):
+    def delete_project(self, project_name: str, del_repo: bool, del_local: bool):
         try:
             if len(argv) > 1:
-                project_name, del_local = self.get_del_info()
+                project_name, del_repo, del_local = self.get_del_info()
             else:
                 logger.info("File runs from IDE. No parameters were given.")
 
             project_folder_path = get_project_folder_path(self.user.projects_path, project_name)
-            self.delete_git_repo(project_name)
+
+            if del_repo:
+                self.delete_git_repo(project_name)
             if del_local:
                 self.delete_local_files(project_folder_path)
         except Exception as e:
@@ -111,22 +112,21 @@ class Remover():
         return driver
 
     def get_del_info(self):
-        if str(argv[1]) == "yes":
-            del_local = True
-        else:
-            del_local = False
-        project_name = str(argv[2])
-        return project_name, del_local
+        project_name = str(argv[1])
+        del_repo = bool(int(argv[2]))
+        del_local = bool(int(argv[3]))
+        return project_name, del_repo, del_local
 
 
 
 if __name__ == "__main__":
-    # project_name and del_local can be set for testing purposes
-    # does not affect call from terminal (see get_del_info method)
+    # project_name, del_repo and del_local can be set for testing purposes
+    # does not affect call from terminal (gets overridden in remover.delete_project method)
 
     project_name = "test_project_1"
+    del_repo = False
     del_local = True
 
     user = User.by_dot_env()
     remover = Remover(user)
-    remover.delete_project(project_name, del_local)
+    remover.delete_project(project_name, del_repo, del_local)
