@@ -15,11 +15,14 @@
 * Projects must be named without spaces. ("new_project" instead of "new project")
 
 + To delete a git repository open the terminal and type\
-    'delete_repo <name_of_repo_to_delete>'
-+ To delete a complete project (git repository AND local files) open terminal and type\
-    'delete_complete_project <name_of_project_to_delete>'
+    'delete -p <name_of_repo_to_delete> -r'
++ To delete ALL LOCAL FILES of a project open the terminal and type\
+    'delete -p <name_of_project_to_delete> -l'
++ To delete a git repository and ALL LOCAL FILES open the terminal and type\
+    'delete -p <name_of_project_to_delete> -r -l'
 
 * Make sure to spell the commands correctly. There is no checking.
+* If the automated deletion does not work it may be the case that you have to log in manually once in a while.
 
 ### Example:
 * The following command creates a new public project called "this_is_a_new_project" and installs numpy, pandas and matplotlib in the conda environment:
@@ -27,24 +30,16 @@
 create public this_is_a_new_project numpy pandas matplotlib
 ```
 
-* The following command deletes a repository called "this_is_a_repo":
+* The following command deletes all local files of a project called "this_is_a_repo":
 ```
-delete_repo this_is_a_repo
-```
-
-* The following command deletes a complete project (git repository and all local files) called "this_is_a_project":
-```
-delete_repo this_is_a_project
+delete -p this_is_a_repo -l
 ```
 
 
 ## Installation for Mac OS
 
 * For the create functionality, you need to have miniconda installed. See [minconda installation](https://docs.conda.io/en/latest/miniconda.html).
-* If you have Google Chrome installed, you need to install Chromedriver for the delete functionality to work. Install with [Homebrew](https://formulae.brew.sh/cask/chromedriver) or [manually](https://sites.google.com/chromium.org/driver/downloads).
-* Maybe Mac OS won't allow Chromedriver to operate. To give permission, open settings, navigate to "Security and Privacy" and click on the "alllow" button in the bottom half of the page.
-* The buttom will be displayed after the first try to use the delete functionality.
-* Both functionalities work independently, e.g. you do not need to install Chromedriver if you are using the create functionality only.
+
 
 ### 1) Add code command for opening VS Code in Terminal
 
@@ -59,12 +54,12 @@ delete_repo this_is_a_project
 ### 2) Create Github Login Token
 
 1. Go to https://github.com/settings/tokens
-2. Create a new Login token, checking only the option "repo".
+2. Create a new Login token, checking  the option "repo" and "delete_repo".
 * Do not close the website. You need the token for the next step.
 * Once closed, you can't see the token again and have to create a new one.
 
 
-### 3) Clone this repo as well as create and modify .env file
+### 3) Clone this repo, install requirements and create and modify .env file
 1. Open terminal and execute:
 ```
     cd PATH/TO/YOUR/PROJECTS/FOLDER
@@ -75,8 +70,9 @@ delete_repo this_is_a_project
     touch .env
     open .env
 ```
-2. Store your username, password, and desired path for new projects.
-* The password is the generated token.
+2. Store your username, password, token and desired path for new projects.
+* TK is the generated token.
+* PW is your normal password.
 * The path must NOT end with a forward slash (/).
 * Use the provided format at the bottom of this README.
 * Save and close the .env file.
@@ -94,14 +90,20 @@ source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/my_commands.sh
 source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/.env
 ```
 
-### 5) Attention:
+### 4) Modify custom files
+* in the custom_files folder in this project are a gitignore.txt and a settings.json file.
+* these files get copied to a newly created project.
+* modify these files according to your needs.
+* if you need more custom files in every new project, add them into the custom_files folder and modify the create_local_files method within the create.py file to specify where these files should get copied to.
+
+### Attention:
 * Changing the location of the .env or my_commands.sh file (or of the projects folder) will break the procedure.
 * If changed, the paths to (or in) the .zshrc and the .env files must be respecified.
 
-### 6) ENV File Format:
+### ENV File Format:
 ```
 UN="Username123"
 TK="Token123"
 PW="Password123"
-FP="DESIRED/PATH/TO/NEW/PROJECTS/"
+FP="DESIRED/PATH/TO/NEW/PROJECTS"
 ```
