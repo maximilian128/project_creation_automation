@@ -22,6 +22,7 @@
     'delete -p <name_of_project_to_delete> -r -l'
 
 * Make sure to spell the commands correctly. There is no checking.
+* If the automated deletion does not work it may be the case that you have to log in manually once in a while.
 
 ### Example:
 * The following command creates a new public project called "this_is_a_new_project" and installs numpy, pandas and matplotlib in the conda environment:
@@ -38,10 +39,7 @@ delete -p this_is_a_repo -l
 ## Installation for Mac OS
 
 * For the create functionality, you need to have miniconda installed. See [minconda installation](https://docs.conda.io/en/latest/miniconda.html).
-* If you have Google Chrome installed, you need to install Chromedriver for the delete functionality to work. Install with [Homebrew](https://formulae.brew.sh/cask/chromedriver) or [manually](https://sites.google.com/chromium.org/driver/downloads).
-* Maybe Mac OS won't allow Chromedriver to operate. To give permission, open settings, navigate to "Security and Privacy" and click on the "alllow" button in the bottom half of the page.
-* The buttom will be displayed after the first try to use the delete functionality.
-* Both functionalities work independently, e.g. you do not need to install Chromedriver if you are using the create functionality only.
+
 
 ### 1) Add code command for opening VS Code in Terminal
 
@@ -56,12 +54,12 @@ delete -p this_is_a_repo -l
 ### 2) Create Github Login Token
 
 1. Go to https://github.com/settings/tokens
-2. Create a new Login token, checking only the option "repo".
+2. Create a new Login token, checking  the option "repo" and "delete_repo".
 * Do not close the website. You need the token for the next step.
 * Once closed, you can't see the token again and have to create a new one.
 
 
-### 3) Clone this repo and create and modify .env file
+### 3) Clone this repo, install requirements and create and modify .env file
 1. Open terminal and execute:
 ```
     cd PATH/TO/YOUR/PROJECTS/FOLDER
@@ -72,8 +70,9 @@ delete -p this_is_a_repo -l
     touch .env
     open .env
 ```
-2. Store your username, password, and desired path for new projects.
-* The password is the generated token.
+2. Store your username, password, token and desired path for new projects.
+* TK is the generated token.
+* PW is your normal password.
 * The path must NOT end with a forward slash (/).
 * Use the provided format at the bottom of this README.
 * Save and close the .env file.
@@ -106,5 +105,5 @@ source PATH/TO/YOUR/PROJECTS/FOLDER/project_creation_automation/.env
 UN="Username123"
 TK="Token123"
 PW="Password123"
-FP="DESIRED/PATH/TO/NEW/PROJECTS/"
+FP="DESIRED/PATH/TO/NEW/PROJECTS"
 ```
