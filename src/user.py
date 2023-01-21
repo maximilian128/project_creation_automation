@@ -1,4 +1,6 @@
-from typing_extensions import Self
+#from typing_extensions import Self
+from typing import Self
+
 from dotenv import load_dotenv
 from dataclasses import dataclass
 from os import getenv

@@ -1,5 +1,4 @@
 # annotaions import not necessary from Python 3.11 on
-# release on 24th October 2022
 from __future__ import annotations
 
 from pathlib import Path
@@ -15,6 +14,7 @@ from user import User
 
 
 class Creator():
+    # TODO Add docstrings to everything
     def __init__(self, user: User) -> None:
         self.user = user
 
@@ -64,6 +64,7 @@ class Creator():
         except FileExistsError as e:
             # if the project directory already exists none of the above directories and files get created in try block.
             logger.warning(f"A project called {project_name} already exists.")
+            raise e
 
     def create_conda__env(self, project_name: str, project_folder_path: Path, packages_to_install: list[str]):
 
@@ -72,14 +73,16 @@ class Creator():
         env_path = project_folder_path / "env"
         run(create_shell_comand_list(f"conda create --prefix {env_path} python=3 -y"))
         if packages_to_install != []:
-            run(create_shell_comand_list(f"conda run -p {env_path} pip install {packages_string}"))
+            process = run(create_shell_comand_list(f"conda run -p {env_path} pip install {packages_string}"))
+            if process.returncode != 0:
+                logger.error("Not all packages could be installed.")
 
 
     def create_git_repo(self, project_name: str, privacy: bool):
         try:
             git_user = Github(self.user.username, self.user.token).get_user()
         except BadCredentialsException as e:
-            logger.exception("Username or token credentials are wrong.")
+            logger.exception("Username or token credentials are wrong or outdated.")
             raise e
         try:
             git_user.create_repo(project_name, private=privacy)
@@ -113,7 +116,8 @@ if __name__ == "__main__":
 
     project_name="test_project_1"
     privacy=True
-    packages_to_install=["numpy", "shapely"]
+    install_env = False
+    packages_to_install=["numpy", "matplotlib"]
 
 
     user = User.by_dot_env()
